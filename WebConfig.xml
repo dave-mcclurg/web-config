@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSavedValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SavedValue>
+    <UniqueID>input2</UniqueID>
+    <Value>10</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input3</UniqueID>
+    <Value>10</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input4</UniqueID>
+    <Value>1</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input5</UniqueID>
+    <Value>False</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input6</UniqueID>
+    <Value>1</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input7</UniqueID>
+    <Value>0</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input8</UniqueID>
+    <Value>1</Value>
+  </SavedValue>
+  <SavedValue>
+    <UniqueID>input9</UniqueID>
+    <Value>0</Value>
+  </SavedValue>
+</ArrayOfSavedValue>
