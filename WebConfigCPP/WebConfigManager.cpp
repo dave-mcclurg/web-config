@@ -371,7 +371,7 @@ namespace WebConfig
 
 			ProxyInstance = this;
 
-            theFolder = theFolder;
+            this->theFolder = theFolder;
 			theServer = new HTTPServer(&Proxy::OnResponse);
             theServer->Start(thePort);
 

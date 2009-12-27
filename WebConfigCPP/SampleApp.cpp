@@ -129,3 +129,134 @@ namespace SampleApp
     }
 }
 #endif
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
+
+#include "windows.h"
+#include "graphics2.h"
+
+#include "WebConfigManager.h"
+#include "WebConfigInput.h"
+
+#include <string>
+using namespace std;
+
+#define ESC 0x1b
+
+static void GetResourcePath(char* path)
+{
+	GetModuleFileName(NULL, path, _MAX_PATH);
+	int length = strlen(path);
+	if (length > 0)
+	{
+		int i = length;
+		while ((i > 0) && (path[i] != '\\'))
+		{
+			i--;
+		}
+		length = i;
+		path[length] = 0;
+	}
+	if (length > 4 && stricmp(&path[length-4], "\\bin") == 0)
+	{
+		length -= 4;
+		path[length] = 0;
+	}
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				   LPSTR lpCmdLine, int nCmdShow)
+{
+    char path[_MAX_PATH];
+	GetResourcePath(path);
+
+	WebConfig::Manager::Instance().Startup(8080, path);
+
+	//Simulation.Instance.Init();
+
+	string name = "david";
+	bool showStats = false;
+	int choice = 2;
+	int fun = 50;
+
+	new WebConfig::InputText("debug/name", name);
+	new WebConfig::InputBool("debug/show stats", showStats);
+	new WebConfig::InputSelect("debug/choose", choice)->SetOptions("now", "later", "never");
+	new WebConfig::InputSliderInt("debug/fun", fun);
+
+	new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
+	new WebConfig::InputLink("debug/View Screen", "Screen.JPG");
+
+	srand((unsigned int)time(NULL));  // Seed the random number generator
+	int GraphDriver=0,GraphMode=0;
+	initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 800, 600 ); // Start Window
+	char tempstring[80]="unused";
+
+	//Variable Declarations
+
+	bool KeepGoing=true;
+	char KeyPressed;
+
+	float ballX, ballY;
+	float prevX, prevY;
+	float XVel, YVel;
+
+	// Initial Position
+	ballX = 100.0;
+	ballY = 40.0;
+
+	// Initial Velocity
+	XVel = 4.0;
+	YVel = 5.0;
+
+	//Main Loop
+	while ( KeepGoing && !shouldexit() ) {
+
+		delay( 5 );
+
+		// Remember previous position
+		prevX = ballX;
+		prevY = ballY;
+
+		// Move the ball (Add Velocity to Position)
+		ballX += XVel;
+		ballY += YVel;
+
+		// Erase old Ball
+		setcolor(BLACK);
+        setfillstyle(SOLID_FILL, BLACK);
+		fillellipse( (int)prevX, (int)prevY, 20, 20);
+
+		// Draw New ball
+		setcolor(RED);
+        setfillstyle(SOLID_FILL, RED);
+		fillellipse( (int)ballX, (int)ballY, 20, 20);
+
+		// Bounch off left/right walls
+		if ( ballX > 770  || ballX < 30) {
+			XVel *= -1.0;
+		}
+
+		// Bounch off top/bottom walls
+		if ( ballY > 570  || ballY < 30) {
+			YVel *= -1.0;
+		}
+
+		// Check to see if a key has been pressed
+		if (kbhit()) {
+			KeyPressed = getch();
+
+			if (KeyPressed == 'q') {  // q - quit
+				KeepGoing = false;
+			}
+
+		}//end if kbhit()
+
+	} // end while kbhit
+
+} //end of main()
+

@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
@@ -46,7 +46,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="2"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -192,6 +192,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\graphics2.h"
+				>
+			</File>
+			<File
 				RelativePath="..\HTMLBuilder.cpp"
 				>
 			</File>
@@ -228,10 +232,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Program.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\SampleApp.cpp"
 				>
 			</File>
@@ -259,11 +259,15 @@
 				RelativePath="..\WebConfigManager.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\WebConfigManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\winbgi2.cpp"
+				>
+			</File>
 		</Filter>
-		<File
-			RelativePath=".\WebConfig.rc"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
