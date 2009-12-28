@@ -142,6 +142,8 @@ namespace SampleApp
 #include "WebConfigManager.h"
 #include "WebConfigInput.h"
 
+#include "GuiConsole.h"
+
 #include <string>
 using namespace std;
 
@@ -171,6 +173,10 @@ static void GetResourcePath(char* path)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				   LPSTR lpCmdLine, int nCmdShow)
 {
+#ifdef _DEBUG
+	RedirectIOToConsole();
+#endif
+
     char path[_MAX_PATH];
 	GetResourcePath(path);
 
@@ -183,26 +189,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int choice = 2;
 	int fun = 50;
 
+	vector<string> choiceList;
+	choiceList.push_back("now");
+	choiceList.push_back("later");
+	choiceList.push_back("never");
+
 	new WebConfig::InputText("debug/name", name);
 	new WebConfig::InputBool("debug/show stats", showStats);
-	new WebConfig::InputSelect("debug/choose", choice)->SetOptions("now", "later", "never");
+	(new WebConfig::InputSelect("debug/choose", choice))->SetOptions(&choiceList);
 	new WebConfig::InputSliderInt("debug/fun", fun);
 
-	new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
-	new WebConfig::InputLink("debug/View Screen", "Screen.JPG");
+	//new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
+	//new WebConfig::InputLink("debug/View Screen", "Screen.JPG");
 
 	srand((unsigned int)time(NULL));  // Seed the random number generator
 	int GraphDriver=0,GraphMode=0;
 	initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 800, 600 ); // Start Window
-	char tempstring[80]="unused";
 
 	//Variable Declarations
-
-	bool KeepGoing=true;
-	char KeyPressed;
-
 	float ballX, ballY;
-	float prevX, prevY;
 	float XVel, YVel;
 
 	// Initial Position
@@ -214,11 +219,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	YVel = 5.0;
 
 	//Main Loop
-	while ( KeepGoing && !shouldexit() ) {
+	while (!shouldexit()) {
 
+		WebConfig::Manager::Instance().Update();
 		delay( 5 );
 
 		// Remember previous position
+		float prevX, prevY;
 		prevX = ballX;
 		prevY = ballY;
 
@@ -248,15 +255,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// Check to see if a key has been pressed
 		if (kbhit()) {
-			KeyPressed = getch();
-
-			if (KeyPressed == 'q') {  // q - quit
-				KeepGoing = false;
+			char KeyPressed = getch();
+			if (KeyPressed == '\x1b') {
+				closegraph();
 			}
+		}
+	}
 
-		}//end if kbhit()
-
-	} // end while kbhit
+	WebConfig::Manager::Instance().Shutdown();
 
 } //end of main()
 

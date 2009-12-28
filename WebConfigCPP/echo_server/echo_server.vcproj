@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="WebConfig"
-	ProjectGUID="{1F27071A-FB15-4739-A1AB-E0D4B3BBD924}"
-	RootNamespace="WebConfig"
+	Name="echo_server"
+	ProjectGUID="{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}"
+	RootNamespace="echo_server"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,10 +18,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="0"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,12 +41,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="2"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -63,7 +63,7 @@
 				AdditionalDependencies="wsock32.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -115,7 +115,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -135,7 +135,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -188,91 +188,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Convert.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graphics2.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GuiConsole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GuiConsole.h"
-				>
-			</File>
-			<File
-				RelativePath="..\HTMLBuilder.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\HTMLBuilder.h"
-				>
-			</File>
-			<File
-				RelativePath="..\HTTPServer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\HTTPServer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\HttpUtility.h"
-				>
-			</File>
-			<File
-				RelativePath="..\IniFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\IniFile.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Path.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Path.h"
-				>
-			</File>
-			<File
-				RelativePath="..\SampleApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ScreenCapture.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Simulation.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\string_prefix.h"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigInput.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigInput.h"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\winbgi2.cpp"
+				RelativePath="..\echo_server.cpp"
 				>
 			</File>
 		</Filter>

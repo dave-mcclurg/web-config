@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebConfig", "WebConfig.vcproj", "{1F27071A-FB15-4739-A1AB-E0D4B3BBD924}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "echo_server", "..\echo_server\echo_server.vcproj", "{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{1F27071A-FB15-4739-A1AB-E0D4B3BBD924}.Debug|Win32.Build.0 = Debug|Win32
 		{1F27071A-FB15-4739-A1AB-E0D4B3BBD924}.Release|Win32.ActiveCfg = Release|Win32
 		{1F27071A-FB15-4739-A1AB-E0D4B3BBD924}.Release|Win32.Build.0 = Release|Win32
+		{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}.Debug|Win32.Build.0 = Debug|Win32
+		{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}.Release|Win32.ActiveCfg = Release|Win32
+		{5DE41C7B-79C1-42C5-A263-23C135BC2AB1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

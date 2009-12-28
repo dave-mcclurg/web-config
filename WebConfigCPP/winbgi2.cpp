@@ -1274,16 +1274,25 @@ void floodfill(int x, int y, int border)
 }
 
 
+int quitgraph()
+{
+	return (0 == hPalette);
+}
 
 static bool handle_input(bool wait = 0)
 {
 	MSG lpMsg;
-	if (wait ? GetMessage(&lpMsg, NULL, 0, 0) 
-		: PeekMessage(&lpMsg, NULL, 0, 0, PM_REMOVE)) 
+	while (1)
 	{
-		TranslateMessage(&lpMsg);
-		DispatchMessage(&lpMsg);
-		return true;
+		if (PeekMessage(&lpMsg, NULL, 0, 0, PM_REMOVE)) 
+		{
+			TranslateMessage(&lpMsg);
+			DispatchMessage(&lpMsg);
+			return true;
+		}
+		if (!wait || quitgraph())
+			break;
+		Sleep(1);
 	}
 	return false;
 }
@@ -1293,7 +1302,8 @@ void delay(unsigned msec)
 {
 	timeout_expired = false;
 	SetTimer(hWnd, TIMER_ID, msec, NULL); 
-	while (!timeout_expired) handle_input(true);
+	while (!timeout_expired && !quitgraph())
+		handle_input(true);
 }
 
 // The Mouse functions    (1-Oct-2000, Matthew Weathers)
@@ -1661,8 +1671,7 @@ default:
 
 void closegraph()
 {
-	DestroyWindow(hWnd);
-	while(handle_input(true));
+	PostMessage(hWnd, WM_CLOSE, 0, 0);
 }
 
 

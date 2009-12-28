@@ -2,6 +2,7 @@
 
 #include "asynchat.h"
 
+using namespace std;
 #include <iostream>
 
 class echo_server : public dispatcher
