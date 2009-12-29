@@ -59,12 +59,22 @@ namespace WebConfig
 		jc->set_terminator ("\r\n\r\n");
 	}
 
+#ifdef _WIN32
+	static void init_winsock (void)
+	{
+		WSADATA wd;
+		WSAStartup (MAKEWORD (1,1), &wd);
+	}
+#endif
+
 	/// <summary>
 	/// Start the listener
 	/// </summary>
 	/// <param name="portNum">Port on which to listen</param>
 	void HTTPServer::Start(int portNum)
 	{
+		init_winsock();
+
 		cerr << "create: " << create_socket (AF_INET, SOCK_STREAM) << endl;
 
 		struct sockaddr_in addr;
@@ -91,7 +101,7 @@ namespace WebConfig
 			/* Wait up to 500ms */
 			struct timeval timeout;
 			timeout.tv_sec = 0;
-			timeout.tv_usec = 500 * 1000;
+			timeout.tv_usec = 0; //500 * 1000;
 
 			poll (&timeout);
 		}
