@@ -51,10 +51,10 @@ namespace WebConfig
 	/// </summary>
 	class HTTPServer : public dispatcher
 	{
+	public:
+
 		typedef void (*Callback)(const HTTPRequestParams& rq, HTTPResponse& rp);
 		Callback OnResponse;
-
-	public:
 
 		/// <summary>
 		/// Constructor
@@ -70,7 +70,6 @@ namespace WebConfig
 		void Update();
 
 		void handle_accept (void);
-		void handle_request(std::string input_buffer);
 	};
 }
 

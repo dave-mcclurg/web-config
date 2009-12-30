@@ -3,6 +3,7 @@
 // Under the MIT License, details: License.txt.
 
 #include "HTMLBuilder.h"
+#include "HttpUtility.h"
 #include <cassert>
 #include <stdarg.h>
 
@@ -28,20 +29,7 @@ namespace WebConfig
 	/// </summary>
 	string HtmlBuilder::text(const std::string& str)
 	{
-		string s = "";
-		for (const char* p=str.c_str(); *p!='\0'; p++)
-		{
-			switch (*p)
-			{
-			case '&': s += "&amp;"; break;
-			case '\'': s += "&apos;"; break;
-			case '>': s += "&gt;"; break;
-			case '<': s += "&lt;"; break;
-			case '"': s += "&quot;"; break;
-			default: s += *p; break;
-			}
-		}
-		return s;
+		return HttpUtility::HtmlEncode(str);
 	}
 
 	/// <summary>
@@ -94,8 +82,8 @@ namespace WebConfig
 		assert(!tagStack.empty());
 		string top = tagStack.top();
 		assert(top == tag);
+		append(fmt("</%s>\n", top.c_str()));
 		tagStack.pop();
-		append(fmt("</%s>\n", tag.c_str()));
 	}
 
 	/// <summary>

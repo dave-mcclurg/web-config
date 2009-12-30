@@ -42,6 +42,7 @@ namespace WebConfig
 		}
 		void found_terminator (void);
 		void handle_close (void) {}
+		void handle_request();
 	};
 
 	static void WriteLog(string msg)
@@ -59,21 +60,16 @@ namespace WebConfig
 		jc->set_terminator ("\r\n\r\n");
 	}
 
-#ifdef _WIN32
-	static void init_winsock (void)
-	{
-		WSADATA wd;
-		WSAStartup (MAKEWORD (1,1), &wd);
-	}
-#endif
-
 	/// <summary>
 	/// Start the listener
 	/// </summary>
 	/// <param name="portNum">Port on which to listen</param>
 	void HTTPServer::Start(int portNum)
 	{
-		init_winsock();
+#ifdef _WIN32
+		WSADATA wd;
+		WSAStartup (MAKEWORD (1,1), &wd);
+#endif
 
 		cerr << "create: " << create_socket (AF_INET, SOCK_STREAM) << endl;
 
@@ -98,10 +94,10 @@ namespace WebConfig
 	{
 		if (channels.size())
 		{
-			/* Wait up to 500ms */
+			/* Return immediately */
 			struct timeval timeout;
 			timeout.tv_sec = 0;
-			timeout.tv_usec = 0; //500 * 1000;
+			timeout.tv_usec = 0;
 
 			poll (&timeout);
 		}
@@ -110,11 +106,14 @@ namespace WebConfig
 	void Channel::found_terminator (void)
 	{
 		if (input_buffer.length())
-			parent->handle_request(input_buffer);
-		close();
+		{
+			input_buffer += get_terminator();
+			handle_request();
+		}
+		close_when_done();
 	}
 
-	void HTTPServer::handle_request(string input_buffer)
+	void Channel::handle_request()
 	{
 		HTTPRequestParams requestParams;
 		HTTPResponse response;
@@ -130,7 +129,7 @@ namespace WebConfig
 		// HTTP GET /billing/servlet/comm.billing.GetBalance?Date=17:54:24&CustomerID=8057 HTTP/1.1
 
 		int numberOfBytesRead = input_buffer.length();
-		string myReadBuffer = input_buffer; // decode?
+		const string& myReadBuffer = input_buffer;
 
 		// read buffer index
 		RState parserState = STATE_METHOD;
@@ -305,7 +304,7 @@ namespace WebConfig
 		response.Headers["Date"] = ""; //FIXME: DateTime.Now.ToString("r");
 
 		// if (response.Status == (int)RESPONSE_OK)
-		OnResponse(requestParams, response);
+		parent->OnResponse(requestParams, response);
 
 		string HeadersString = response.Version + " " + StatusString + "\n";
 
@@ -318,11 +317,11 @@ namespace WebConfig
 		//HeadersString = Encoding.ASCII.GetBytes(HeadersString);
 
 		// Send headers	
-		send(HeadersString.c_str(), HeadersString.length());
+		send(HeadersString);
 
 		// Send body
 		if (response.BodyData.length() > 0)
-			send(response.BodyData.c_str(), response.BodyData.length());
+			send(response.BodyData);
 
 		if (response.fs.is_open())
 		{
@@ -330,7 +329,7 @@ namespace WebConfig
 			while (response.fs.read(buffer, sizeof(buffer)))
 			{
 				int bytesRead = response.fs.gcount();
-				send(buffer, bytesRead);
+				send(string(buffer, bytesRead));
 			}
 			response.fs.close();
 		}
