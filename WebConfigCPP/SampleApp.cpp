@@ -137,7 +137,7 @@ namespace SampleApp
 #include <string.h>
 
 #include "windows.h"
-#include "graphics2.h"
+#include "winbgi2.h"
 
 #include "WebConfigManager.h"
 #include "WebConfigInput.h"

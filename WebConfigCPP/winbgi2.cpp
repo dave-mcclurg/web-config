@@ -1,3 +1,7 @@
+//Using the WinBGI Graphics Package
+//Fall 2006, Biola University
+//http://csci.biola.edu/csci105/graphics.html
+
 //
 // winbgi.cpp  -- One of the files required to run BGI graphics programs
 //
@@ -7,7 +11,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <math.h>
-#include "graphics2.h"
+#include "winbgi2.h"
 
 #define MAX_PAGES 16
 

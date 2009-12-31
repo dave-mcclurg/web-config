@@ -1,8 +1,26 @@
 // -*- Mode: C++; tab-width: 4 -*-
 
 #include "asynchat.h"
+#include <string>
 
 using namespace std;
+
+// return the size of the largest prefix of needle at the end
+// of haystack
+
+static int
+find_prefix_at_end (string haystack, string needle)
+{
+  int hl = haystack.length();
+  int nl = needle.length();
+
+  for (int i = max (nl-hl, 0); i < nl; i++) {
+    if (haystack.compare (hl-(nl-i), nl-i, needle) == 0) {
+	  return (nl-i);
+	}
+  }
+  return 0;
+}
 
 // string allocation issues:
 //
@@ -34,8 +52,6 @@ async_chat::get_terminator (void)
 {
   return terminator;
 }
-
-#include "string_prefix.h"
 
 void
 async_chat::handle_read (void)

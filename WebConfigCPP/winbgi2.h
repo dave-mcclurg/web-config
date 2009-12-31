@@ -1,10 +1,14 @@
+//Using the WinBGI Graphics Package
+//Fall 2006, Biola University
+//http://csci.biola.edu/csci105/graphics.html
+
 //
-// graphics.h  -- One of the files required to run BGI graphics programs
+// winbgi2.h  -- One of the files required to run BGI graphics programs
 //
 // You don't need to edit this file, or print it out.
 
-#ifndef __GRAPHICS2_H__
-#define __GRAPHICS2_H__
+#ifndef __WINBGI2_H__
+#define __WINBGI2_H__
 
 #define far
 #define huge

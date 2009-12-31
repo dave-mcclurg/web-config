@@ -23,18 +23,14 @@ string Path::GetDirectoryName(const string& path)
 	int sep = path.rfind(DirectorySeparatorChar);
 
 	int asep = path.rfind(AltDirectorySeparatorChar);
-	if (asep < sep)
+	if (sep == string::npos || (asep != string::npos && asep < sep))
+	{
 		sep = asep;
+	}
 
 	if (sep == string::npos)
 	{
 		return "";
-	}
-
-	// ends with last separator?
-	if (sep == (path.size() - 1))
-	{
-		return path;
 	}
 
 	return path.substr(0, (sep + 1));

@@ -301,10 +301,17 @@ namespace WebConfig
 
 		response.Headers.clear();
 		response.Headers["Server"] = "HTTPServer/1.0.*";
-		response.Headers["Date"] = ""; //FIXME: DateTime.Now.ToString("r");
 
-		// if (response.Status == (int)RESPONSE_OK)
-		parent->OnResponse(requestParams, response);
+		//response.Headers["Date"] = DateTime.Now.ToString("r");
+		if (requestParams.Headers.find("Date") != requestParams.Headers.end())
+		{
+			response.Headers["Date"] = requestParams.Headers["Date"];
+		}
+
+		if (response.Status == (int)RESPONSE_OK)
+		{
+			parent->OnResponse(requestParams, response);
+		}
 
 		string HeadersString = response.Version + " " + StatusString + "\n";
 

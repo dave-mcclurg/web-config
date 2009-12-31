@@ -192,10 +192,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\graphics2.h"
-				>
-			</File>
-			<File
 				RelativePath="..\GuiConsole.cpp"
 				>
 			</File>
@@ -252,7 +248,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\string_prefix.h"
+				RelativePath="..\StringHelper.h"
 				>
 			</File>
 			<File
@@ -273,6 +269,10 @@
 			</File>
 			<File
 				RelativePath="..\winbgi2.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\winbgi2.h"
 				>
 			</File>
 		</Filter>

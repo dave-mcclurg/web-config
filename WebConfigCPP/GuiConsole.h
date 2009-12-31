@@ -1,10 +1,13 @@
-﻿#ifndef GUICONSOLE_H
+﻿// Adding Console I/O to a Win32 GUI App
+// Windows Developer Journal, December 1997
+// http://www.halcyon.com/~ast/dload/guicon.htm
+
+#ifndef GUICONSOLE_H
 #define GUICONSOLE_H
 
 #ifdef _DEBUG
+// allocate a console and send console I/O to it for a Win32 GUI app
 void RedirectIOToConsole();
-#endif
-
 #endif
 
 //#include <crtdbg.h>
@@ -23,3 +26,5 @@ void RedirectIOToConsole();
 //_RPT0(_CRT_ERROR, "This is testing _CRT_ERROR output\n");
 //_ASSERT( 0 && "testing _ASSERT" );
 //_ASSERTE( 0 && "testing _ASSERTE" );
+
+#endif

@@ -8,6 +8,7 @@
 #include "WebConfigInput.h"
 #include "WebConfigManager.h"
 #include "Convert.h"
+#include "StringHelper.h"
 #include "Path.h"
 #include "IniFile.h"
 
@@ -115,7 +116,7 @@ namespace WebConfig
 			for (map<string, InputBase*>::iterator i = inputs.begin(); i != inputs.end(); ++i)
             {
                 string s = (*i).second->pForm->Name;
-                if (uniqueNames.find(s) != uniqueNames.end())
+                if (uniqueNames.find(s) == uniqueNames.end())
                 {
                     uniqueNames.insert(s);
 
@@ -233,12 +234,12 @@ namespace WebConfig
 
 				string postStr = rq.BodyData; //Encoding.ASCII.GetString(rq.BodyData, 0, rq.BodySize);
 				vector<string> settings;
-				Convert::Split(postStr, "&;", settings);
+				StringHelper::Split(postStr, "&;", settings);
 				for (vector<string>::iterator i = settings.begin(); i != settings.end(); ++i)
                 {
 					const string& setting = (*i);
 					vector<string> nameValue;
-					Convert::Split(setting, "=", nameValue);
+					StringHelper::Split(setting, "=", nameValue);
                     if (nameValue.size() == 2 && nameValue[1] != "")
                     {
 						string name = HttpUtility::UrlDecode(nameValue[0]);
@@ -276,8 +277,8 @@ namespace WebConfig
                 return;
             }
 
-            string path = theFolder + "\\" + rq.URL;
-			bool valid = (path.find("..") != string::npos); // make it secure
+            string path = theFolder + rq.URL;
+			bool valid = (path.find("..") == string::npos); // make it secure
 
 			if (valid && Path::FileExists(path))
             {

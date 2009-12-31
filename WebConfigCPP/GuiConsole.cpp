@@ -1,4 +1,8 @@
-﻿#include <windows.h>
+﻿// Adding Console I/O to a Win32 GUI App
+// Windows Developer Journal, December 1997
+// http://www.halcyon.com/~ast/dload/guicon.htm
+
+#include <windows.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <io.h>
