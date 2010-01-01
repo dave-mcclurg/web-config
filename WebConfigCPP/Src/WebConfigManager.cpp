@@ -3,14 +3,14 @@
 // Under the MIT License, details: License.txt.
 
 #include "HTTPServer.h"
-#include "HTTPUtility.h"
 #include "HTMLBuilder.h"
 #include "WebConfigInput.h"
 #include "WebConfigManager.h"
-#include "Convert.h"
-#include "StringHelper.h"
-#include "Path.h"
-#include "IniFile.h"
+#include "Support/HTTPUtility.h"
+#include "Support/Convert.h"
+#include "Support/StringHelper.h"
+#include "Support/Path.h"
+#include "Support/IniFile.h"
 
 #include <map>
 #include <vector>
@@ -70,7 +70,7 @@ namespace WebConfig
         ManagerImpl()
         {
 			theServer = NULL;
-			theFolder = "c:\\www";
+			theFolder = "c:\\www\\";
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace WebConfig
             string path = theFolder + rq.URL;
 			bool valid = (path.find("..") == string::npos); // make it secure
 
-			if (valid && Path::FileExists(path))
+			if (valid && Path::DirectoryExists(path))
             {
 				if (Path::FileExists(path + "index.htm"))
                     path += "\\index.htm";
@@ -322,9 +322,19 @@ namespace WebConfig
 
                 // Get the data from a specified item in the key.
                 String s = (String)rk.GetValue("Content Type");
-#endif
+#else
+				string fileExtension = StringHelper::tolower(Path::GetExtension(path));
 
-                string s = "???";	// FIXME
+				string s = "";
+				if (fileExtension == ".css")
+					s = "text/css";
+				else if (fileExtension == ".js")
+					s = "text/javascript";
+				else if (fileExtension == ".htm" || fileExtension == ".html")
+					s = "text/html";
+				else
+					s = "";	// ??
+#endif
 
 				rp.fs.open(path.c_str(), ios::in|ios::binary);
                 if (s != "")

@@ -1,7 +1,7 @@
 #ifndef HTTPSERVER_H
 #define HTTPSERVER_H
 
-#include "asynchat.h"
+#include "Support/asynchat.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -49,7 +49,7 @@ namespace WebConfig
 	/// <summary>
 	/// Embedded HTTP server
 	/// </summary>
-	class HTTPServer : public dispatcher
+	class HTTPServer : public async_sockets::dispatcher
 	{
 	public:
 

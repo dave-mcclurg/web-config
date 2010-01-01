@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SolutionDir)/Src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -172,109 +173,121 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\asynchat.cpp"
+				RelativePath="..\Src\HTMLBuilder.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\asynchat.h"
+				RelativePath="..\Src\HTMLBuilder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\asyncore.cpp"
+				RelativePath="..\Src\HTTPServer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\asyncore.h"
+				RelativePath="..\Src\HTTPServer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Convert.h"
+				RelativePath="..\Src\WebConfig.h"
 				>
 			</File>
 			<File
-				RelativePath="..\GuiConsole.cpp"
+				RelativePath="..\Src\WebConfigInput.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GuiConsole.h"
+				RelativePath="..\Src\WebConfigInput.h"
 				>
 			</File>
 			<File
-				RelativePath="..\HTMLBuilder.cpp"
+				RelativePath="..\Src\WebConfigManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\HTMLBuilder.h"
+				RelativePath="..\Src\WebConfigManager.h"
 				>
 			</File>
-			<File
-				RelativePath="..\HTTPServer.cpp"
+			<Filter
+				Name="Support"
 				>
-			</File>
-			<File
-				RelativePath="..\HTTPServer.h"
+				<File
+					RelativePath="..\Src\Support\asynchat.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\asynchat.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\asyncore.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\asyncore.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\Convert.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\HttpUtility.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\IniFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\IniFile.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\Path.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\Path.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Src\Support\StringHelper.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Test"
 				>
-			</File>
-			<File
-				RelativePath="..\HttpUtility.h"
-				>
-			</File>
-			<File
-				RelativePath="..\IniFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\IniFile.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Path.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Path.h"
-				>
-			</File>
-			<File
-				RelativePath="..\SampleApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ScreenCapture.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Simulation.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\StringHelper.h"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigInput.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigInput.h"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\WebConfigManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\winbgi2.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\winbgi2.h"
-				>
-			</File>
+				<File
+					RelativePath="..\Test\GuiConsole.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\GuiConsole.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\SampleApp.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\ScreenCapture.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\Simulation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\winbgi2.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Test\winbgi2.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

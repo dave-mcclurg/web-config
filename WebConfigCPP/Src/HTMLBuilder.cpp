@@ -3,7 +3,7 @@
 // Under the MIT License, details: License.txt.
 
 #include "HTMLBuilder.h"
-#include "HttpUtility.h"
+#include "Support/HttpUtility.h"
 #include <cassert>
 #include <stdarg.h>
 

@@ -4,6 +4,10 @@
 #include <fstream>
 #include <windows.h>
 
+#include <io.h>   // For access().
+#include <sys/types.h>  // For stat().
+#include <sys/stat.h>   // For stat().
+
 using namespace std;
 
 const char Path::DirectorySeparatorChar('\\');
@@ -99,15 +103,28 @@ bool Path::HasExtension(const string& path)
 	return (dot != string::npos);
 }
 
+/// Determines whether the specified directory exists.
+bool Path::DirectoryExists(const string& path)
+{
+    if ( access( path.c_str(), 0 ) == 0 )
+    {
+        struct stat status;
+        stat( path.c_str(), &status );
+        return ( status.st_mode & S_IFDIR ) != 0;
+    }
+	return false;
+}
+
 /// Determines whether the specified file exists.
 bool Path::FileExists(const string& path)
 {
-	bool bExists = false;
-	fstream fin;
-	fin.open(path.c_str(),ios::in);
-	bExists = fin.is_open();
-	fin.close();
-	return bExists;
+    if ( access( path.c_str(), 0 ) == 0 )
+    {
+        struct stat status;
+        stat( path.c_str(), &status );
+        return ( status.st_mode & S_IFDIR ) == 0;
+    }
+	return false;
 }
 
 /// Gets the names of subdirectories in the specified directory.

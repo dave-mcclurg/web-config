@@ -36,6 +36,9 @@ public:
 	/// Determines whether the specified file exists.
 	static bool FileExists(const std::string& path);
 
+	/// Determines whether the specified directory exists.
+	static bool DirectoryExists(const std::string& path);
+
 	/// Gets the names of subdirectories in the specified directory.
 	static int GetDirectories(const std::string& path, std::vector<std::string>& list);
 

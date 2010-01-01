@@ -2,10 +2,10 @@
 // Copyright (c) 2009 David McClurg <dpm@efn.org>
 // Under the MIT License, details: License.txt.
 
-#include "asynchat.h"
-#include "Convert.h"
+#include "Support/asynchat.h"
+#include "Support/Convert.h"
 #include "HTTPServer.h"
-#include "HTTPUtility.h"
+#include "Support/HTTPUtility.h"
 
 #include <string>
 #include <map>
@@ -28,7 +28,7 @@ namespace WebConfig
 		STATE_OK
 	};
 
-	class Channel : public async_chat
+	class Channel : public async_sockets::async_chat
 	{
 		class HTTPServer* parent;
 		string input_buffer;
@@ -54,7 +54,7 @@ namespace WebConfig
 	{
 		struct sockaddr addr;
 		int addr_len = sizeof(sockaddr);
-		int fd = dispatcher::accept (&addr, &addr_len);
+		int fd = async_sockets::dispatcher::accept (&addr, &addr_len);
 		Channel * jc = new Channel(this);
 		jc->set_fileno (fd);
 		jc->set_terminator ("\r\n\r\n");
@@ -333,8 +333,9 @@ namespace WebConfig
 		if (response.fs.is_open())
 		{
 			char buffer[512];
-			while (response.fs.read(buffer, sizeof(buffer)))
+			while (!response.fs.eof())
 			{
+				response.fs.read(buffer, sizeof(buffer));
 				int bytesRead = response.fs.gcount();
 				send(string(buffer, bytesRead));
 			}

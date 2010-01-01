@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 4 -*-
 
-#include "asynchat.h"
+#include "Support/asynchat.h"
 
 using namespace std;
 #include <iostream>
 
-class echo_server : public dispatcher
+class echo_server : public async_sockets::dispatcher
 {
   void handle_accept (void);
 };
 
-class echo_channel : public async_chat
+class echo_channel : public async_sockets::async_chat
 {
   string input_buffer;
 
@@ -24,7 +24,7 @@ echo_server::handle_accept (void)
 {
   struct sockaddr addr;
   int addr_len = sizeof(sockaddr);
-  int fd = dispatcher::accept (&addr, &addr_len);
+  int fd = async_sockets::dispatcher::accept (&addr, &addr_len);
   echo_channel * jc = new echo_channel;
   jc->set_fileno (fd);
   jc->set_terminator ("\r\n\r\n");
@@ -85,6 +85,6 @@ main (int argc, char * argv[])
   cerr << "bind: " << es.bind ((struct sockaddr *) &addr, sizeof (addr)) << endl;
   cerr << "listen: " << es.listen (5) << endl;
 
-  dispatcher::loop(0);
+  async_sockets::dispatcher::loop(0);
   return 0;
 }

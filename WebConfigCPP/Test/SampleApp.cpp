@@ -170,6 +170,12 @@ static void GetResourcePath(char* path)
 	}
 }
 
+//void CaptureScreen()
+//{
+//	string path = WebConfig::Manager::Instance().GetFolder() + "\\Screen.JPG";
+//	CaptureWindowToFile(this.Handle, path, ImageFormat.Jpeg);
+//}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				   LPSTR lpCmdLine, int nCmdShow)
 {
@@ -204,7 +210,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	srand((unsigned int)time(NULL));  // Seed the random number generator
 	int GraphDriver=0,GraphMode=0;
-	initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 800, 600 ); // Start Window
+	WinBGI::initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 800, 600 ); // Start Window
 
 	//Variable Declarations
 	float ballX, ballY;
@@ -219,10 +225,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	YVel = 5.0;
 
 	//Main Loop
-	while (!shouldexit()) {
+	while (!WinBGI::shouldexit()) {
 
 		WebConfig::Manager::Instance().Update();
-		delay( 5 );
+		WinBGI::delay( 5 );
 
 		// Remember previous position
 		float prevX, prevY;
@@ -234,14 +240,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ballY += YVel;
 
 		// Erase old Ball
-		setcolor(BLACK);
-        setfillstyle(SOLID_FILL, BLACK);
-		fillellipse( (int)prevX, (int)prevY, 20, 20);
+		WinBGI::setcolor(WinBGI::BLACK);
+        WinBGI::setfillstyle(WinBGI::SOLID_FILL, WinBGI::BLACK);
+		WinBGI::fillellipse( (int)prevX, (int)prevY, 20, 20);
 
 		// Draw New ball
-		setcolor(RED);
-        setfillstyle(SOLID_FILL, RED);
-		fillellipse( (int)ballX, (int)ballY, 20, 20);
+		WinBGI::setcolor(WinBGI::RED);
+        WinBGI::setfillstyle(WinBGI::SOLID_FILL, WinBGI::RED);
+		WinBGI::fillellipse( (int)ballX, (int)ballY, 20, 20);
 
 		// Bounch off left/right walls
 		if ( ballX > 770  || ballX < 30) {
@@ -254,10 +260,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 		// Check to see if a key has been pressed
-		if (kbhit()) {
-			char KeyPressed = getch();
+		if (WinBGI::kbhit()) {
+			char KeyPressed = WinBGI::getch();
 			if (KeyPressed == '\x1b') {
-				closegraph();
+				WinBGI::closegraph();
 			}
 		}
 	}

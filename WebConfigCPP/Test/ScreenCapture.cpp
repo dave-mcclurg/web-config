@@ -140,7 +140,7 @@ static void WriteBMPFile(HBITMAP bitmap, const char* filename, HDC hDC)
 	GlobalFree((HGLOBAL)lpBits);
 }
 
-void ScreenCapture(HWND hDesktopWnd, string bmpFilename)
+void CaptureScreen(HWND hDesktopWnd, string bmpFilename)
 {
 	RECT rectClient;
 	RECT rectWindow;

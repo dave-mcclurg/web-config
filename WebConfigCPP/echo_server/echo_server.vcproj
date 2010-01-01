@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SolutionDir)/Src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -172,19 +173,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\asynchat.cpp"
+				RelativePath="..\Src\Support\asynchat.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\asynchat.h"
+				RelativePath="..\Src\Support\asynchat.h"
 				>
 			</File>
 			<File
-				RelativePath="..\asyncore.cpp"
+				RelativePath="..\Src\Support\asyncore.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\asyncore.h"
+				RelativePath="..\Src\Support\asyncore.h"
 				>
 			</File>
 			<File
