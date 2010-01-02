@@ -1,7 +1,12 @@
-﻿#ifndef WEBCONFIGMANAGER_H
+﻿// WebConfig - Use a web browser to configure your application
+// Copyright (c) 2009 David McClurg <dpm@efn.org>
+// Under the MIT License, details: License.txt.
+
+#ifndef WEBCONFIGMANAGER_H
 #define WEBCONFIGMANAGER_H
 
 #include <string>
+#include <assert.h>
 
 namespace WebConfig
 {
@@ -17,6 +22,17 @@ namespace WebConfig
 		/// private constructor
 		/// </summary>
         Manager();
+
+		Manager(const Manager&)
+		{
+			assert(false);
+		}
+
+		Manager& operator=(const Manager&)
+		{
+			assert(false);
+			return *this;
+		}
 
 	public:
 

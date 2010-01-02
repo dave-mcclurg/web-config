@@ -1,3 +1,7 @@
+// WebConfig - Use a web browser to configure your application
+// Copyright (c) 2009 David McClurg <dpm@efn.org>
+// Under the MIT License, details: License.txt.
+
 #ifndef HTTPSERVER_H
 #define HTTPSERVER_H
 

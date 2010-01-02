@@ -2,74 +2,70 @@
 // Copyright (c) 2009 David McClurg <dpm@efn.org>
 // Under the MIT License, details: License.txt.
 
-#if 0
-using System;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
+#include <vector>
+#include <string>
+#include <assert.h>
+#include "winbgi2.h"
 
 namespace SampleApp
 {
-    public class Vec3
+    class Vec3
     {
-        public float x, y, z;
+	public:
 
-        public Vec3()
+        float x, y, z;
+
+        Vec3()
         {
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
+            this->x = 0;
+            this->y = 0;
+            this->z = 0;
         }
 
-        public Vec3(float x, float y, float z)
+        Vec3(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this->x = x;
+            this->y = y;
+            this->z = z;
         }
 
-        public static Vec3 operator +(Vec3 v1, Vec3 v2)
+        static Vec3 operator +(const Vec3& v1, const Vec3& v2)
         {
-            return new Vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+            return Vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
         }
 
-        public static Vec3 operator *(Vec3 v, float scalar)
+        static Vec3 operator *(const Vec3& v, float scalar)
         {
-            return new Vec3(v.x * scalar, v.y * scalar, v.z * scalar);
+            return Vec3(v.x * scalar, v.y * scalar, v.z * scalar);
         }
     }
 
     /// <summary>
     /// The ball class
     /// </summary>
-    public class Ball
+    class Ball
     {
         float colorScale;
-        Vec3 pos = new Vec3();
-        Vec3 vel = new Vec3();
+        Vec3 pos;
+        Vec3 vel;
 
-        static Font font = new Font("Arial", 8);
-        static SolidBrush fontBrush = new SolidBrush(Color.Black);
+	public:
 
-        public Ball()
+        Ball()
         {
-            Simulation sim = Simulation.Instance;
-            colorScale = sim.Rand.Next(0, 101) / 100.0f; // 0 to 1
+            Simulation& sim = Simulation.Instance();
+			colorScale = Random::Next(0, 101) / 100.0f; // 0 to 1
 
-            pos.x = sim.Rand.Next(100, 200);
-            pos.y = sim.Rand.Next(100, 200);
+            pos.x = Random::Next(100, 200);
+            pos.y = Random::Next(100, 200);
 
-            float speed = sim.Rand.Next(5, 11); // 5 to 10
-            float angle = sim.Rand.Next(0, 360);
+            float speed = Random::Next(5, 11); // 5 to 10
+            float angle = Random::Next(0, 360);
             vel.x = (float)Math.Cos((double)angle) * speed;
             vel.y = (float)Math.Sin((double)angle) * speed;
         }
 
-        public void Draw(Graphics g)
+        void Draw(Graphics g)
         {
             Simulation sim = Simulation.Instance;
 
@@ -82,13 +78,15 @@ namespace SampleApp
 
             if (Simulation.Instance.showPos)
             {
+				char buffer[80];
+				sprintf(buffer, "(%.2f,%.2f)", pos.x, pos.y);
+
                 float off = sim.BallRadius;
-                g.DrawString(string.Format("({0:0.0},{1:0.0})", pos.x, pos.y),
-                    font, fontBrush, pos.x + off, pos.y + off, new StringFormat());
+				WinBGI::outtextxy(pos.x + off, pos.y + off, buffer);
             }
         }
 
-        public void Move(int screenWidth, int screenHeight)
+        void Move(int screenWidth, int screenHeight)
         {
             Simulation sim = Simulation.Instance;
 
@@ -111,32 +109,53 @@ namespace SampleApp
     /// <summary>
     /// The simulation manager
     /// </summary>
-    public class Simulation
+    class Simulation
     {
-        #region singleton pattern
-        // http://www.yoda.arachsys.com/csharp/singleton.html
-        private static readonly Simulation instance = new Simulation();
-        public static Simulation Instance { get { return instance; } }
+		/// <summary>
+		/// private constructor
+		/// </summary>
+		Simulation() : BallColor(0, 1, 0)
+		{
+			numRequested = 10;
 
-        // Explicit static constructor to tell C# compiler
-        // not to mark type as beforefieldinit
-        static Simulation() { }
+			showPos = false;
 
-        private Simulation()
-        {
-        }
-        #endregion
+			BallRadius = 10;
+			BallSpeed = 1;
+		}
+
+		Simulation(const Simulation&)
+		{
+			assert(false);
+		}
+
+		Simulation& operator=(const Simulation&)
+		{
+			assert(false);
+			return *this;
+		}
+
+	public:
+
+		/// <summary>
+		/// Get the singleton
+		/// </summary>
+        static Simulation& Instance()
+		{
+	        static Simulation instance;
+			return instance;
+		}
 
         int numRequested = 10;
 
-        public bool showPos = false;
-        public Random Rand = new Random();
+        bool showPos = false;
+        Random Rand = new Random();
 
-        public int BallRadius = 10;
-        public float BallSpeed = 1;
-        public Vec3 BallColor = new Vec3(0, 1, 0);
+        int BallRadius = 10;
+        float BallSpeed = 1;
+        Vec3 BallColor = new Vec3(0, 1, 0);
 
-        List<Ball> balls = new List<Ball>();
+        vector<Ball> balls = new List<Ball>();
 
         public void Update(int width, int height)
         {
@@ -198,4 +217,3 @@ namespace SampleApp
         }
     }
 }
-#endif
