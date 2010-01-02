@@ -2,218 +2,204 @@
 // Copyright (c) 2009 David McClurg <dpm@efn.org>
 // Under the MIT License, details: License.txt.
 
-#include <vector>
+#include "Simulation.h"
+#include "WebConfigManager.h"
+#include "WebConfigInput.h"
+
 #include <string>
-#include <assert.h>
+#include <math.h>
+
 #include "winbgi2.h"
+
+#define PI 3.1415926535f
 
 namespace SampleApp
 {
-    class Vec3
-    {
+	class Math
+	{
 	public:
 
-        float x, y, z;
+		static float Sin(float x) { return sinf(x); }
+		static float Cos(float x) { return cosf(x); }
+	};
 
-        Vec3()
-        {
-            this->x = 0;
-            this->y = 0;
-            this->z = 0;
-        }
+	class Random
+	{
+	public:
 
-        Vec3(float x, float y, float z)
-        {
-            this->x = x;
-            this->y = y;
-            this->z = z;
-        }
+		static int Next() { return rand(); }
+		static int Next(int maxValue) { return rand() % maxValue; }
+		static int Next(int minValue, int maxValue) { return minValue + (rand() % maxValue); }
+	};
 
-        static Vec3 operator +(const Vec3& v1, const Vec3& v2)
-        {
-            return Vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
-        }
+	class Vec3
+	{
+	public:
 
-        static Vec3 operator *(const Vec3& v, float scalar)
-        {
-            return Vec3(v.x * scalar, v.y * scalar, v.z * scalar);
-        }
-    }
+		float x, y, z;
 
-    /// <summary>
-    /// The ball class
-    /// </summary>
-    class Ball
-    {
-        float colorScale;
-        Vec3 pos;
-        Vec3 vel;
+		Vec3()
+		{
+			this->x = 0;
+			this->y = 0;
+			this->z = 0;
+		}
+
+		Vec3(float x, float y, float z)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+		}
+
+		Vec3 operator +(const Vec3& v) const
+		{
+			return Vec3(x + v.x, y + v.y, z + v.z);
+		}
+
+		Vec3 operator *(float scalar) const
+		{
+			return Vec3(x * scalar, y * scalar, z * scalar);
+		}
+	};
+
+	/// <summary>
+	/// The ball class
+	/// </summary>
+	class Ball
+	{
+		Vec3 pos;
+		Vec3 vel;
 
 	public:
 
-        Ball()
-        {
-            Simulation& sim = Simulation.Instance();
-			colorScale = Random::Next(0, 101) / 100.0f; // 0 to 1
+		Ball()
+		{
+			const Simulation& sim = Simulation::Instance();
 
-            pos.x = Random::Next(100, 200);
-            pos.y = Random::Next(100, 200);
+			pos.x = (float)WinBGI::getmaxx() / 2 + Random::Next(WinBGI::getmaxx() / 3);
+			pos.y = (float)WinBGI::getmaxy() / 2 + Random::Next(WinBGI::getmaxy() / 3);
 
-            float speed = Random::Next(5, 11); // 5 to 10
-            float angle = Random::Next(0, 360);
-            vel.x = (float)Math.Cos((double)angle) * speed;
-            vel.y = (float)Math.Sin((double)angle) * speed;
-        }
+			float speed = (float)Random::Next(5, 11); // 5 to 10
+			float angle = (float)Random::Next(0, 360) * PI / 180;
+			vel.x = Math::Cos(angle) * speed;
+			vel.y = Math::Sin(angle) * speed;
+		}
 
-        void Draw(Graphics g)
-        {
-            Simulation sim = Simulation.Instance;
+		void Draw()
+		{
+			const Simulation& sim = Simulation::Instance();
 
-            // compute color
-            Vec3 temp = sim.BallColor * (colorScale * 255);
-            Color color = Color.FromArgb((int)temp.x, (int)temp.y, (int)temp.z);
+			WinBGI::setcolor(sim.BallColor);
+			WinBGI::setfillstyle(WinBGI::SOLID_FILL, sim.BallColor);
+			WinBGI::fillellipse( (int)pos.x, (int)pos.y, 20, 20);
 
-            g.FillEllipse(new SolidBrush(Color.Black), pos.x, pos.y, sim.BallRadius + 0.5f, sim.BallRadius + 0.5f);
-            g.FillEllipse(new SolidBrush(color), pos.x, pos.y, sim.BallRadius, sim.BallRadius);
-
-            if (Simulation.Instance.showPos)
-            {
+			if (sim.showPos)
+			{
 				char buffer[80];
 				sprintf(buffer, "(%.2f,%.2f)", pos.x, pos.y);
 
-                float off = sim.BallRadius;
-				WinBGI::outtextxy(pos.x + off, pos.y + off, buffer);
-            }
-        }
-
-        void Move(int screenWidth, int screenHeight)
-        {
-            Simulation sim = Simulation.Instance;
-
-            pos = pos + vel * sim.BallSpeed;
-
-            // Collide with top and bottom walls
-            if (pos.y <= 0 || pos.y >= screenHeight - sim.BallRadius)
-            {
-                vel.y = -vel.y;
-            }
-
-            // Collide with left and right walls
-            if (pos.x <= 0 || pos.x >= screenWidth - sim.BallRadius)
-            {
-                vel.x = -vel.x;
-            }
-        }
-    }
-
-    /// <summary>
-    /// The simulation manager
-    /// </summary>
-    class Simulation
-    {
-		/// <summary>
-		/// private constructor
-		/// </summary>
-		Simulation() : BallColor(0, 1, 0)
-		{
-			numRequested = 10;
-
-			showPos = false;
-
-			BallRadius = 10;
-			BallSpeed = 1;
+				int off = sim.BallRadius;
+				WinBGI::outtextxy((int)(pos.x + off), (int)(pos.y + off), buffer);
+			}
 		}
 
-		Simulation(const Simulation&)
+		void Move()
 		{
-			assert(false);
-		}
+			const Simulation& sim = Simulation::Instance();
 
-		Simulation& operator=(const Simulation&)
+			pos = pos + vel * sim.BallSpeed;
+
+			int w = WinBGI::getmaxx() + 1;
+			int h = WinBGI::getmaxy() + 1;
+
+			// Collide with left and right walls
+			if (pos.x <= 0 || pos.x >= w - sim.BallRadius)
+			{
+				vel.x = -vel.x;
+			}
+
+			// Collide with top and bottom walls
+			if (pos.y <= 0 || pos.y >= h - sim.BallRadius)
+			{
+				vel.y = -vel.y;
+			}
+		}
+	};
+
+	Simulation::Simulation()
+	{
+		numRequested = 10;
+
+		showPos = false;
+
+		BallRadius = 10;
+		BallSpeed = 1;
+		BallColor = WinBGI::RED;
+	}
+
+	void Simulation::Update()
+	{
+		for (int i=0; i<balls.size(); ++i)
 		{
-			assert(false);
-			return *this;
+			balls[i]->Move();
 		}
+	}
 
-	public:
-
-		/// <summary>
-		/// Get the singleton
-		/// </summary>
-        static Simulation& Instance()
+	void Simulation::Draw()
+	{
+		for (int i=0; i<balls.size(); ++i)
 		{
-	        static Simulation instance;
-			return instance;
+			balls[i]->Draw();
 		}
+	}
 
-        int numRequested = 10;
+	void Simulation::Reset(int numBalls)
+	{
+		for (int i=0; i<balls.size(); ++i)
+		{
+			delete balls[i];
+		}
+		balls.clear();
+		for (int i = 0; i < numBalls; i++)
+		{
+			balls.push_back(new Ball());
+		}
+	}
 
-        bool showPos = false;
-        Random Rand = new Random();
+	void Simulation::StartAnimation()
+	{
+		Simulation::Instance().Reset(numRequested);
+	}
 
-        int BallRadius = 10;
-        float BallSpeed = 1;
-        Vec3 BallColor = new Vec3(0, 1, 0);
+	void Simulation::Init()
+	{
+#if 0
+		WebConfig::FormSettings* formSettings = WebConfig::Manager::Instance().GetFormSettings("game");
+		formSettings->AutoSubmit = true;
+		formSettings->AutoSave = true;
 
-        vector<Ball> balls = new List<Ball>();
+		new WebConfig.InputButton("game/Reset", (val) => StartAnimation());
 
-        public void Update(int width, int height)
-        {
-            foreach (Ball ball in balls)
-            {
-                ball.Move(width, height);
-            }
-        }
+		new WebConfig.InputSliderInt("game/Number of Balls",
+			() => numRequested, (val) => { numRequested = val; StartAnimation(); });
+		new WebConfig.InputSliderInt("game/Ball Radius",
+			() => BallRadius, (val) => { BallRadius = val; }).SetRange(0, 20, 0);
+		new WebConfig.InputSliderFloat("game/Speed Factor",
+			() => BallSpeed, (val) => { BallSpeed = val; }).SetRange(0.1f, 2, 1);
 
-        public void Draw(Graphics g)
-        {
-            foreach (Ball ball in balls)
-            {
-                ball.Draw(g);
-            }
-        }
+		int choice = 1;
+		new WebConfig.InputBool("game/show pos", () => showPos, (val) => showPos = val);
+		new WebConfig.InputSelect("game/choose", () => choice, (val) => choice = val).SetOptions("now", "later", "never");
 
-        public void Reset(int numBalls)
-        {
-            balls.Clear();
-            for (int i = 0; i < numBalls; i++)
-            {
-                balls.Add(new Ball());
-            }
-        }
+		new WebConfig.InputSliderFloat("game/Color.Red",
+			() => BallColor.x, (val) => { BallColor.x = val; }).SetRange(0, 1, 1);
+		new WebConfig.InputSliderFloat("game/Color.Green",
+			() => BallColor.y, (val) => { BallColor.y = val; }).SetRange(0, 1, 1);
+		new WebConfig.InputSliderFloat("game/Color.Blue",
+			() => BallColor.z, (val) => { BallColor.z = val; }).SetRange(0, 1, 1);
+#endif
 
-        void StartAnimation()
-        {
-            Simulation.Instance.Reset(numRequested);
-        }
-
-        public void Init()
-        {
-            WebConfig.FormSettings formSettings = WebConfig.Manager.Instance.GetForm("game");
-            formSettings.AutoSubmit = true;
-            formSettings.AutoSave = true;
-
-            new WebConfig.InputButton("game/Reset", (val) => StartAnimation());
-
-            new WebConfig.InputSliderInt("game/Number of Balls",
-                () => numRequested, (val) => { numRequested = val; StartAnimation(); });
-            new WebConfig.InputSliderInt("game/Ball Radius",
-                () => BallRadius, (val) => { BallRadius = val; }).SetRange(0, 20, 0);
-            new WebConfig.InputSliderFloat("game/Speed Factor",
-                () => BallSpeed, (val) => { BallSpeed = val; }).SetRange(0.1f, 2, 1);
-
-            int choice = 1;
-            new WebConfig.InputBool("game/show pos", () => showPos, (val) => showPos = val);
-            new WebConfig.InputSelect("game/choose", () => choice, (val) => choice = val).SetOptions("now", "later", "never");
-
-            new WebConfig.InputSliderFloat("game/Color.Red",
-                () => BallColor.x, (val) => { BallColor.x = val; }).SetRange(0, 1, 1);
-            new WebConfig.InputSliderFloat("game/Color.Green",
-                () => BallColor.y, (val) => { BallColor.y = val; }).SetRange(0, 1, 1);
-            new WebConfig.InputSliderFloat("game/Color.Blue",
-                () => BallColor.z, (val) => { BallColor.z = val; }).SetRange(0, 1, 1);
-
-            StartAnimation();
-        }
-    }
+		StartAnimation();
+	}
 }

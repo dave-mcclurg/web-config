@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Test\Simulation.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Test\winbgi2.cpp"
 				>
 			</File>
