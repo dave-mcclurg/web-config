@@ -85,6 +85,15 @@ namespace SampleApp
 
 		WebConfig::Manager::Instance().Startup(8080, path);
 
+		srand((unsigned int)time(NULL));  // Seed the random number generator
+
+		// Initialize the graphics interface
+		int GraphDriver=0,GraphMode=0;
+		WinBGI::initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 640, 480 ); // Start Window
+		WinBGI::setviewport(0,0,640,480,0);
+
+		Simulation::Instance().Init();
+
 		string name = "david";
 		bool showStats = false;
 		int choice = 2;
@@ -102,13 +111,6 @@ namespace SampleApp
 
 		//new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
 		//new WebConfig::InputLink("debug/View Screen", "Screen.JPG");
-
-		srand((unsigned int)time(NULL));  // Seed the random number generator
-		int GraphDriver=0,GraphMode=0;
-		WinBGI::initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 640, 480 ); // Start Window
-		WinBGI::setviewport(0,0,640,480,0);
-
-		Simulation::Instance().Init();
 
 		//Main Loop
 		while (!WinBGI::shouldexit())
