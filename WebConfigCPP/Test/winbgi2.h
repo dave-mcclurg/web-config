@@ -10,6 +10,8 @@
 #ifndef __WINBGI2_H__
 #define __WINBGI2_H__
 
+#include <windows.h>
+
 #define far
 #define huge
 #define random(range) (rand() % (range))
@@ -287,7 +289,9 @@ namespace WinBGI
 	int kbhit PROTO((void));		
 	void delay PROTO((unsigned msec));
 	void restorecrtmode PROTO((void));
-	int shouldexit();
+	bool handle_input(bool wait = 0);
+	int quitgraph();
+	HWND gethandle();
 
 	bool mouseup();
 	bool mousedown();

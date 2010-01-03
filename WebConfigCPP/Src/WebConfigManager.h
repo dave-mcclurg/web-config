@@ -74,6 +74,11 @@ namespace WebConfig
 		/// Remove an input from the dictionary
 		/// </summary>
 		void RemoveInput(InputBase* input);
+
+		/// <summary>
+		/// Get the root folder
+		/// </summary>
+		std::string Manager::GetFolder();
 	};
 }
 

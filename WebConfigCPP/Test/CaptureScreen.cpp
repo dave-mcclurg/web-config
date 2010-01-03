@@ -1,5 +1,4 @@
-#include <string>
-#include "windows.h"
+#include "CaptureScreen.h"
 
 using namespace std;
 

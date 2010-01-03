@@ -98,6 +98,7 @@ namespace async_sockets
 
 		void			handle_read				(void);
 		void			handle_write			(void);
+		void			read_after_terminator	(char * buffer, size_t size);
 
 		virtual void	collect_incoming_data	(const std::string& data) { };
 		virtual void	found_terminator		(void) { };

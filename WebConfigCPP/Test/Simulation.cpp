@@ -6,10 +6,13 @@
 #include "WebConfigManager.h"
 #include "WebConfigInput.h"
 
+#include <vector>
 #include <string>
 #include <math.h>
 
 #include "winbgi2.h"
+
+using namespace std;
 
 #define PI 3.1415926535f
 
@@ -154,51 +157,49 @@ namespace SampleApp
 		}
 	}
 
-	void Simulation::Reset(int numBalls)
+	void Simulation::Reset()
 	{
 		for (int i=0; i<balls.size(); ++i)
 		{
 			delete balls[i];
 		}
 		balls.clear();
-		for (int i = 0; i < numBalls; i++)
+
+		for (int i = 0; i < numRequested; i++)
 		{
 			balls.push_back(new Ball());
 		}
 	}
 
-	void Simulation::StartAnimation()
+	static void StartAnimation()
 	{
-		Simulation::Instance().Reset(numRequested);
+		Simulation::Instance().Reset();
 	}
 
 	void Simulation::Init()
 	{
-#if 0
 		WebConfig::FormSettings* formSettings = WebConfig::Manager::Instance().GetFormSettings("game");
 		formSettings->AutoSubmit = true;
 		formSettings->AutoSave = true;
 
-		new WebConfig.InputButton("game/Reset", (val) => StartAnimation());
+		new WebConfig::InputButton("game/Reset", StartAnimation);
 
-		new WebConfig.InputSliderInt("game/Number of Balls",
-			() => numRequested, (val) => { numRequested = val; StartAnimation(); });
-		new WebConfig.InputSliderInt("game/Ball Radius",
-			() => BallRadius, (val) => { BallRadius = val; }).SetRange(0, 20, 0);
-		new WebConfig.InputSliderFloat("game/Speed Factor",
-			() => BallSpeed, (val) => { BallSpeed = val; }).SetRange(0.1f, 2, 1);
+		(new WebConfig::InputSliderInt("game/Number of Balls", numRequested))->SetCallback(StartAnimation);
+		(new WebConfig::InputSliderInt("game/Ball Radius", BallRadius))->SetRange(0, 20, 0);
+		(new WebConfig::InputSlider("game/Speed Factor", BallSpeed))->SetRange(0.1f, 2, 1);
 
-		int choice = 1;
-		new WebConfig.InputBool("game/show pos", () => showPos, (val) => showPos = val);
-		new WebConfig.InputSelect("game/choose", () => choice, (val) => choice = val).SetOptions("now", "later", "never");
+		static int choice = 1;
 
-		new WebConfig.InputSliderFloat("game/Color.Red",
-			() => BallColor.x, (val) => { BallColor.x = val; }).SetRange(0, 1, 1);
-		new WebConfig.InputSliderFloat("game/Color.Green",
-			() => BallColor.y, (val) => { BallColor.y = val; }).SetRange(0, 1, 1);
-		new WebConfig.InputSliderFloat("game/Color.Blue",
-			() => BallColor.z, (val) => { BallColor.z = val; }).SetRange(0, 1, 1);
-#endif
+		new WebConfig::InputBool("game/show pos", showPos);
+		WebConfig::InputSelect* chooser = new WebConfig::InputSelect("game/choose", choice);
+		chooser->AddOption("now");
+		chooser->AddOption("later");
+		chooser->AddOption("never");
+
+		static Vec3 color;
+		(new WebConfig::InputSlider("game/Color.Red", color.x))->SetRange(0, 1, 1);
+		(new WebConfig::InputSlider("game/Color.Green", color.y))->SetRange(0, 1, 1);
+		(new WebConfig::InputSlider("game/Color.Blue", color.z))->SetRange(0, 1, 1);
 
 		StartAnimation();
 	}

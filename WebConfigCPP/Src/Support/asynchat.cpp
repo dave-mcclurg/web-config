@@ -53,6 +53,26 @@ namespace async_sockets
 		return terminator;
 	}
 
+	int async_chat::read_after_terminator(char * buffer, size_t size)
+	{
+		int n = ac_in_buffer.length();
+		int nn = (size < n)? size: n;
+
+		if (nn > 0)
+		{
+			memcpy(buffer, ac_in_buffer.c_str(), nn);
+			ac_in_buffer = ac_in_buffer.substr(nn);
+			buffer += nn;
+			size -= nn;
+		}
+
+		if (size > 0)
+		int result = recv (buffer, size);
+		if (result > 0)
+			return nn + result;
+		return result;
+	}
+
 	void async_chat::handle_read (void)
 	{
 		char buffer[ac_in_buffer_size];

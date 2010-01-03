@@ -237,6 +237,7 @@ namespace WebConfig
 					if (requestParams.Headers.find("Content-Length") != requestParams.Headers.end())
 					{
 						requestParams.BodySize = Convert::ToInt(requestParams.Headers["Content-Length"]);
+						requestParams.BodyData = "";
 						//requestParams.BodyData = new byte[requestParams.BodySize];
 						parserState = STATE_BODY;
 					}
@@ -284,6 +285,31 @@ namespace WebConfig
 			}
 		}
 		while(ndx < numberOfBytesRead);
+
+		// Read body?
+		if (parserState == STATE_BODY)
+		{
+			int needed = requestParams.BodySize - requestParams.BodyData.length();
+
+			char buffer[512];
+			while (needed > 0)
+			{
+				int requested = (needed > 512)? 512: needed;
+				int result = recv (buffer, requested);
+				if (result > 0)
+				{
+					requestParams.BodyData.append(buffer, result);
+					needed -= result;
+				}
+				else
+					break;
+			}
+
+			if (requestParams.BodyData.length() >= (unsigned int)requestParams.BodySize)
+			{
+				parserState = STATE_OK;
+			}
+		}
 
 		response.Version = "HTTP/1.1";
 

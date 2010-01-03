@@ -1274,13 +1274,17 @@ namespace WinBGI
 		} 
 	}
 
+	HWND gethandle()
+	{
+		return hWnd;
+	}
 
 	int quitgraph()
 	{
 		return (0 == hPalette);
 	}
 
-	static bool handle_input(bool wait = 0)
+	bool handle_input(bool wait)
 	{
 		MSG lpMsg;
 		while (1)
@@ -1939,11 +1943,6 @@ namespace WinBGI
 		}
 		ShowWindow(hWnd, *mode == VGAMAX ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL);
 		UpdateWindow(hWnd);
-	}
-
-	int shouldexit()
-	{
-		return (hPalette == 0);
 	}
 
 	void graphdefaults()

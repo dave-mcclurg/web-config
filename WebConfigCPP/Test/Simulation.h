@@ -48,8 +48,7 @@ namespace SampleApp
 
         void Update();
         void Draw();
-        void Reset(int numBalls);
-        void StartAnimation();
+        void Reset();
         void Init();
     };
 }

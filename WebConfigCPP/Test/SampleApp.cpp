@@ -16,8 +16,7 @@
 #include "WebConfigInput.h"
 
 #include "GuiConsole.h"
-
-#include <string>
+#include "CaptureScreen.h"
 
 using namespace std;
 
@@ -25,32 +24,6 @@ using namespace std;
 
 namespace SampleApp
 {
-	//void CaptureScreen()
-	//{
-	//    string path = WebConfig.Manager.Instance.GetFolder() + @"\Screen.JPG";
-	//    WebConfig.ScreenCapture sc = new WebConfig.ScreenCapture();
-	//    sc.CaptureWindowToFile(this.Handle, path, ImageFormat.Jpeg);
-	//}
-
-	//Simulation.Instance.Init();
-
-	//string name = "david";
-	//bool showStats = false;
-	//int choice = 2;
-	//int fun = 50;
-
-	//new WebConfig.InputText("debug/name", () => name, (val) => name = val);
-	//new WebConfig.InputBool("debug/show stats", () => showStats, (val) => showStats = val);
-	//new WebConfig.InputSelect("debug/choose", () => choice, (val) => choice = val).SetOptions("now", "later", "never");
-	//new WebConfig.InputSliderInt("debug/fun", () => fun, (val) => { fun = val; });
-
-	//new WebConfig.InputButton("debug/Capture Screen", (val) => CaptureScreen());
-	//new WebConfig.InputLink("debug/View Screen", "Screen.JPG");
-
-	//WebConfig.Manager.Instance.Update();
-	//           Simulation.Instance.Update(pictureBox1.Width, pictureBox1.Height);
-	//           Simulation.Instance.Draw(e.Graphics);
-
 	static void GetResourcePath(char* path)
 	{
 		GetModuleFileName(NULL, path, _MAX_PATH);
@@ -72,11 +45,11 @@ namespace SampleApp
 		}
 	}
 
-	//void CaptureScreen()
-	//{
-	//	string path = WebConfig::Manager::Instance().GetFolder() + "\\Screen.JPG";
-	//	CaptureWindowToFile(this.Handle, path, ImageFormat.Jpeg);
-	//}
+	void CaptureScreen()
+	{
+		string path = WebConfig::Manager::Instance().GetFolder() + "\\Screen.BMP";
+		CaptureScreen(WinBGI::gethandle(), path);
+	}
 
 	void Run()
 	{
@@ -92,6 +65,9 @@ namespace SampleApp
 		WinBGI::initgraph( &GraphDriver, &GraphMode, "WebConfig Sample Application", 640, 480 ); // Start Window
 		WinBGI::setviewport(0,0,640,480,0);
 
+		// make sleep() and timeGetTime() return accurate timings
+		timeBeginPeriod(1);
+
 		Simulation::Instance().Init();
 
 		string name = "david";
@@ -99,38 +75,56 @@ namespace SampleApp
 		int choice = 2;
 		int fun = 50;
 
-		vector<string> choiceList;
-		choiceList.push_back("now");
-		choiceList.push_back("later");
-		choiceList.push_back("never");
-
 		new WebConfig::InputText("debug/name", name);
 		new WebConfig::InputBool("debug/show stats", showStats);
-		(new WebConfig::InputSelect("debug/choose", choice))->SetOptions(&choiceList);
+		WebConfig::InputSelect* chooser = new WebConfig::InputSelect("debug/choose", choice);
+		chooser->AddOption("now");
+		chooser->AddOption("later");
+		chooser->AddOption("never");
 		new WebConfig::InputSliderInt("debug/fun", fun);
 
-		//new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
-		//new WebConfig::InputLink("debug/View Screen", "Screen.JPG");
+		new WebConfig::InputButton("debug/Capture Screen", CaptureScreen);
+		new WebConfig::InputLink("debug/View Screen", "Screen.BMP");
 
 		//Main Loop
-		while (!WinBGI::shouldexit())
+		while (!WinBGI::quitgraph())
 		{
-			WebConfig::Manager::Instance().Update();
-			WinBGI::delay( 1 );
-
-			WinBGI::clearviewport();
-			Simulation::Instance().Update();
-			Simulation::Instance().Draw();
+			long timeStart = timeGetTime();
 
 			// Check to see if a key has been pressed
+			WinBGI::handle_input();
 			if (WinBGI::kbhit())
 			{
 				char KeyPressed = WinBGI::getch();
 				if (KeyPressed == '\x1b') {
 					WinBGI::closegraph();
+					break;
 				}
 			}
+
+			WebConfig::Manager::Instance().Update();
+			Simulation::Instance().Update();
+
+			WinBGI::clearviewport();
+
+			Simulation::Instance().Draw();
+
+#define FPS 60
+
+			long timeEnd = timeGetTime();
+			long deltaTime = timeEnd - timeStart;
+			if (deltaTime < (1000/FPS))
+			{
+				// cap frame frate
+				Sleep((1000/FPS) - deltaTime);
+			}
+			else	// too slow; but yield to OS
+			{
+				Sleep(1);
+			}
 		}
+
+		timeEndPeriod(1);
 
 		WebConfig::Manager::Instance().Shutdown();
 

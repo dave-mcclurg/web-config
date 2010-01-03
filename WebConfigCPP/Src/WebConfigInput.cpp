@@ -174,13 +174,13 @@ namespace WebConfig
 		}
 		b.open("select", attr);
 
-		for (unsigned int i = 0; i < options->size(); ++i)
+		for (unsigned int i = 0; i < options.size(); ++i)
 		{
 			attr = b.attr("value", Convert::ToString(i)) + GetExtraAttributes();
 			if (i == Selected)
 				attr += b.attr("selected", "true");
 			b.open("option", attr);
-			b.append(b.text((*options)[i]));
+			b.append(b.text(options[i]));
 			b.close("option");
 		}
 		return b.ToString();

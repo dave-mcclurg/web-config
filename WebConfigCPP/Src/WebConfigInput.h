@@ -51,6 +51,10 @@ namespace WebConfig
         /// <summary>Generated unique id</summary>
         std::string UniqueID;
 
+		/// <summary>Callback when changed</summary>
+		typedef void (*Callback)();
+		Callback OnChange;
+
         // extra attributes
         bool ReadOnly;   // client cannot change
         bool Disabled;
@@ -78,7 +82,15 @@ namespace WebConfig
         /// Get html representation of the input table row
         /// </summary>
 		virtual std::string ToHtml() = 0;
-    };
+
+        /// <summary>
+        /// set the callback
+        /// </summary>
+		void SetCallback(Callback callback)
+		{
+			OnChange = callback;
+		}
+	};
 
 	/// <summary>
 	/// This class represents a button input for a form
@@ -124,18 +136,15 @@ namespace WebConfig
 	/// </summary>
 	class InputButton : public InputBase
 	{
-		typedef void (*Callback)();
-		Callback OnPress;
-
 	public:
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="path">path is "form-name/label-text"</param>
 		/// <param name="pressButton">lambda expression for button press</param>
-		InputButton(std::string path, void (*onPress)()) : InputBase(path)
+		InputButton(std::string path, Callback onPress) : InputBase(path)
 		{
-			OnPress = onPress;
+			SetCallback(onPress);
 		}
 
 		/// <summary>
@@ -143,7 +152,6 @@ namespace WebConfig
 		/// </summary>
 		virtual void SetValue(std::string value)
 		{
-			OnPress();
 		}
 
 		/// <summary>
@@ -260,7 +268,7 @@ namespace WebConfig
 	/// </summary>
 	class InputSelect : public InputBase
 	{
-		std::vector<std::string> *options;
+		std::vector<std::string> options;
 		int& Selected;
 
 	public:
@@ -271,18 +279,15 @@ namespace WebConfig
 		/// <param name="path">path is "form-name/label-text"</param>
 		InputSelect(std::string path, int& selected) : InputBase(path), Selected(selected)
 		{
-			options = new std::vector<std::string>();
-			options->push_back("Disabled");
-			options->push_back("Enabled");
 		}
 
 		/// <summary>
-		/// Set the options
+		/// Add an option
 		/// </summary>
-		/// <param name="sa">array of strings</param>
-		void SetOptions(std::vector<std::string> *sa)
+		/// <param name="option">option text</param>
+		void AddOption(const std::string& option)
 		{
-			options = sa;
+			options.push_back(option);
 		}
 
 		/// <summary>

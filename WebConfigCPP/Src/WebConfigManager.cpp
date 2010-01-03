@@ -216,6 +216,7 @@ namespace WebConfig
                 if (j != inputs.end())
                 {
                     (*j).second->SetValue((*i).second);
+					(*j).second->OnChange();
                 }
 			}
 		}
@@ -484,6 +485,7 @@ namespace WebConfig
 					{
 						// restore value
 						input->SetValue((*j).Value);
+						input->OnChange();
 						break;
 					}
 				}
@@ -558,5 +560,13 @@ namespace WebConfig
 	void Manager::RemoveInput(InputBase* input)
 	{
 		pImpl->RemoveInput(input);
+	}
+
+	/// <summary>
+	/// Get the root folder
+	/// </summary>
+	string Manager::GetFolder()
+	{
+		return pImpl->GetFolder();
 	}
 }
