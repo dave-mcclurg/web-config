@@ -295,7 +295,7 @@ namespace WebConfig
 			while (needed > 0)
 			{
 				int requested = (needed > 512)? 512: needed;
-				int result = recv (buffer, requested);
+				int result = read_after_terminator (buffer, requested);
 				if (result > 0)
 				{
 					requestParams.BodyData.append(buffer, result);

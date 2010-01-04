@@ -42,11 +42,10 @@ public:
 
 	static bool ToBool(const std::string& s)
 	{
-		std::istringstream i(s);
-		bool x;
-		if (!(i >> x))
-			throw BadConversion();
-		return x;
+		const char* str = s.c_str();
+		if (*str == 't' || *str == 'T' || *str == '1')
+			return true;
+		return false;
 	}
 };
 

@@ -45,6 +45,7 @@ namespace WebConfig
 		ReadOnly = false;
 		Disabled = false;
 		Title = "";
+		OnChange = NULL;
 
 		static int idCounter = 0;
 		++idCounter;

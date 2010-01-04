@@ -216,7 +216,10 @@ namespace WebConfig
                 if (j != inputs.end())
                 {
                     (*j).second->SetValue((*i).second);
-					(*j).second->OnChange();
+					if ((*j).second->OnChange != NULL)
+					{
+						(*(*j).second->OnChange)();
+					}
                 }
 			}
 		}
@@ -485,7 +488,10 @@ namespace WebConfig
 					{
 						// restore value
 						input->SetValue((*j).Value);
-						input->OnChange();
+						if (input->OnChange != NULL)
+						{
+							(*input->OnChange)();
+						}
 						break;
 					}
 				}
